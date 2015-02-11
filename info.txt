@@ -1,0 +1,7 @@
+Start the program in matlab by typing:
+
+IntactEye();
+
+
+To then summarise all results and compare to retistruct:
+plotNTaxisData.m

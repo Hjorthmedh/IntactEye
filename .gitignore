@@ -1,0 +1,7 @@
+*.pdf
+*~
+*.mat
+*.csv
+*.png
+.DS_Store
+distmesh
