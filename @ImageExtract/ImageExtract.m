@@ -25,7 +25,7 @@ classdef ImageExtract < handle
     function obj = ImageExtract(retinalSphere)
       
       obj.retinalSphere = retinalSphere;
-      
+            
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

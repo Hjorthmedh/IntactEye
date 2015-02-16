@@ -54,6 +54,7 @@ end
 xlabel('Synthetic NT','fontsize',24)
 ylabel('Estimated NT','fontsize',24)
 set(gca,'fontsize',20)
+axis equal
 axis([0 1 0 1])
 box off
 legend(pNT,'JH','EC','ES','location','southeast')
@@ -71,6 +72,7 @@ end
 xlabel('Synthetic DV','fontsize',24)
 ylabel('Estimated DV','fontsize',24)
 set(gca,'fontsize',20)
+axis equal
 axis([0 1 0 1])
 box off
 % legend(pDV,'JH','EC','ES','location','southeast')

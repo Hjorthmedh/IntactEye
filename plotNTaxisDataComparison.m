@@ -157,7 +157,7 @@ end
 
 figure(figNT)
 legend(pNT,'Projection method (2D)', ...
-       'Intact Eye (3D)', ...
+       'IntactEye (3D)', ...
        'location','Northwest');
 
 axis equal  
@@ -175,7 +175,7 @@ saveas(gcf,'FIGS/Reber-compare-methods-NT-axis.pdf','pdf')
 
 figure(figDV)
 legend(pDV,'Projection method (2D)', ...
-       'Intact Eye (3D)', ...
+       'IntactEye (3D)', ...
        'location','Northwest');
 
 axis equal
@@ -277,7 +277,7 @@ for i = 1:numel(ReberData)
   
 end
 
-legend([pR1 p31], 'Retistruct','Intact eye','location','southeast')
+legend([pR1 p31], 'Retistruct','IntactEye','location','southeast')
 xlabel('Flat NT','fontsize',24)
 ylabel('Spherical NT','fontsize',24)
 set(gca,'fontsize',20)
@@ -324,7 +324,7 @@ for i = 1:numel(ReberData)
   
 end
 
-legend([pR1 p31], 'Retistruct','Intact eye','location','southeast')
+legend([pR1 p31], 'Retistruct','IntactEye','location','southeast')
 xlabel('Flat DV','fontsize',24)
 ylabel('Spherical DV','fontsize',24)
 set(gca,'fontsize',20)
@@ -337,22 +337,22 @@ saveas(gcf,'FIGS/Reber-compare-methods-DV-axis-alt.pdf','pdf')
 
 format compact
 
-% Proj vs Intact Eye
+% Proj vs IntactEye
 CNTPI = corr([ReberNT,sphereNT],'rows','complete');
-fprintf('Corr Proj vs Intact Eye (NT): %.2f\n', CNTPI(2))
+fprintf('Corr Proj vs IntactEye (NT): %.2f\n', CNTPI(2))
 
 % Proj vs Retistruct
 CNTPRS = corr([ReberNT,retistructNT],'rows','complete');
 fprintf('Corr Proj vs Retistruct (NT): %.2f\n', CNTPRS(2))
 
-% Intact Eye vs Retistruct
+% IntactEye vs Retistruct
 CNTIRS = corr([sphereNT,retistructNT],'rows','complete');
-fprintf('Corr Intact Eye vs Retistruct (NT): %.2f\n', CNTIRS(2))
+fprintf('Corr IntactEye vs Retistruct (NT): %.2f\n', CNTIRS(2))
 
 % Save for DV
 
 CDVPI = corr([ReberDV,sphereDV],'rows','complete');
-fprintf('Corr Proj vs Intact Eye (DV): %.2f\n', CDVPI(2))
+fprintf('Corr Proj vs IntactEye (DV): %.2f\n', CDVPI(2))
 
 
 CDVPRS = corr([ReberDV,retistructDV],'rows','complete');
@@ -360,5 +360,5 @@ fprintf('Corr Proj vs Retistruct (DV): %.2f\n', CDVPRS(2))
 
 
 CDVIRS = corr([sphereDV,retistructDV],'rows','complete');
-fprintf('Corr Intact Eye vs Retistruct (DV): %.2f\n', CDVIRS(2))
+fprintf('Corr IntactEye vs Retistruct (DV): %.2f\n', CDVIRS(2))
 
