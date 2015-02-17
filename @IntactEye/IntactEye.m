@@ -49,6 +49,7 @@ classdef IntactEye < handle
     handleSave = [];
     handleLoad = [];
     handleLoadImage = [];
+    handleLoadImage2 = [];    
     
     handlePrintFig = [];
 
@@ -123,7 +124,7 @@ classdef IntactEye < handle
       axis equal
       
       obj.handleLoadMenu = uimenu('label','Load')
-      uimenu(obj.handleLoadMenu,'label','Combine images','callback',@combineImages)
+      uimenu(obj.handleLoadMenu,'label','Combine images','callback',@obj.combineImages)
       
       obj.topView = EyeSphere('top','left',[400; 600; 0],obj.fig,obj.handleAxis);
       obj.sideView = EyeSphere('side','left',[400; 200; 0],obj.fig,obj.handleAxis);      
@@ -294,21 +295,28 @@ classdef IntactEye < handle
       obj.handleLoad = uicontrol('style','pushbutton','string','Reload', ...
                                  'interruptible','off', ...                                 
                                  'units','normalized','position', ...                                  
-                                 [0.82 0.95 0.08 0.04], ...
+                                 [0.86 0.95 0.06 0.04], ...
                                  'callback', @obj.loadGUI);
       
 
+      obj.handleLoadImage2 = uicontrol('style','pushbutton','string','Load images', ...
+                                      'interruptible','off', ...                                      
+                                     'units','normalized','position', ...                                  
+                                     [0.73 0.95 0.06 0.04], ...
+                                     'callback', @ ...
+                                      obj.combineImages);
+      
       obj.handleLoadImage = uicontrol('style','pushbutton','string','Load image', ...
                                       'interruptible','off', ...                                      
                                      'units','normalized','position', ...                                  
-                                     [0.73 0.95 0.08 0.04], ...
+                                     [0.795 0.95 0.06 0.04], ...
                                      'callback', @ ...
                                       obj.loadImageGUI);
       
       obj.handleSide = uicontrol('style','pushbutton','string','Left eye', ...
                                  'interruptible','off', ...                                     
                                  'units','normalized', ...
-                                 'position', [0.91 0.95 0.08 0.04], ...
+                                 'position', [0.925 0.95 0.06 0.04], ...
                                  'callback', @obj.changeEyeSide);
 
 
@@ -431,7 +439,11 @@ classdef IntactEye < handle
         mkdir('SAVE')
       end
       
-      fName = sprintf('SAVE/%s-save.mat', obj.fileName);
+      if(iscell(obj.fileName))
+        fName = sprintf('SAVE/%s-%s-save.mat', obj.fileName{1},obj.fileName{2});
+      else
+        fName = sprintf('SAVE/%s-save.mat', obj.fileName);
+      end
       
       % Create data structure with all the info
       data = struct([]);
@@ -607,10 +619,16 @@ classdef IntactEye < handle
         return
       end
       
-      if(obj.filePath(end) == '/')
-        fPath = obj.filePath(1:end-1);
+      if(iscell(obj.filePath))
+        filePath = obj.filePath{1};
       else
-        fPath = obj.filePath;
+        filePath = obj.filePath;
+      end
+      
+      if(filePath(end) == '/')
+        fPath = filePath(1:end-1);
+      else
+        fPath = filePath;
       end
       
       idx = find(fPath == '/',1,'last');
@@ -853,7 +871,17 @@ classdef IntactEye < handle
     
     function combineImages(obj,source,event)
       
+      imLoad = ImageLoader();
       
+      obj.fileName = {imLoad.imageA.filename, imLoad.imageB.filename};
+      obj.filePath = {imLoad.imageA.filepath, imLoad.imageB.filepath};
+      obj.image = imLoad.combinedImage;
+      
+      % Show the user the new data
+      obj.showImage();
+      obj.showSpheres();
+      obj.updateInjectionThreshold();
+      obj.updateSliders();
       
     end
    

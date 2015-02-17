@@ -26,7 +26,7 @@ classdef ImageLoader < handle
       obj.imageA = obj.loadImage();
       obj.imageB = obj.loadImage(obj.imageA.filepath);
 
-      obj.combinedImage = obj.combineImages(obj.imageA,obj.imageB);
+      obj.combinedImage = obj.combineImages(obj.imageA.img,obj.imageB.img);
       
     end
     
@@ -79,8 +79,13 @@ classdef ImageLoader < handle
         imgA(rB,1,:) = [0,0,0];
       end
       
-      img = [imgA,imgB];
-      
+      try
+        img = [imgA,imgB];
+      catch 
+        fprintf(['Failed to merge the images, are they different ' ...
+                 'size? Trying along other dimension.'])
+        img = [imgA; imgB];
+      end
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
