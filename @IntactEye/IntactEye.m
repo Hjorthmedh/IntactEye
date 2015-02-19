@@ -735,7 +735,7 @@ classdef IntactEye < handle
     function trainUser(obj, source, event)
       
       if(isempty(obj.syntheticData))
-        obj.syntheticData = SyntheticData(obj.handleAxis);
+        obj.syntheticData = SyntheticData(obj.handleAxis,obj.fig);
       else
         obj.syntheticData.randomizeEye();
         obj.syntheticData.plot();

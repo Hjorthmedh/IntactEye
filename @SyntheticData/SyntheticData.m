@@ -61,9 +61,9 @@ classdef SyntheticData < handle
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    function obj = SyntheticData(axisHandle)
+    function obj = SyntheticData(axisHandle,fig)
       
-      if(~exist('axisHandle') | isempty(axisHandle))
+      if(~exist('axisHandle') | isempty(axisHandle) | ~exist('fig') | isempty(fig))
       
         % Later on hide this figure, so user does not see it as we work
         % on it
@@ -71,16 +71,15 @@ classdef SyntheticData < handle
         obj.dataAxis = axes();
         axis equal
       else
-        obj.dataFig = [];
+        obj.dataFig = fig;
         obj.dataAxis =  axisHandle;
         axis equal
       end
         
       % Randomize two eye positions
-      obj.topView = EyeSphere('top', 'left', obj.topViewDefaultCentre, obj.dataAxis);
-      obj.sideView = EyeSphere('side', 'left', obj.sideViewDefaultCentre, obj.dataAxis);
-        
-
+      obj.topView = EyeSphere('top', 'left', obj.topViewDefaultCentre, obj.dataFig, obj.dataAxis);
+      obj.sideView = EyeSphere('side', 'left', obj.sideViewDefaultCentre, obj.dataFig, obj.dataAxis);
+            
       obj.randomizeEye();
       obj.plot();
 
@@ -183,6 +182,8 @@ classdef SyntheticData < handle
       
       axis([xMin xMax yMin yMax])
 
+      axis equal
+      
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

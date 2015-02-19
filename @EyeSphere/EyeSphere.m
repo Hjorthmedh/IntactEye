@@ -116,6 +116,8 @@ classdef EyeSphere < handle
       % Figure axis
       if(exist('ax'))
         obj.ax = ax;
+      else
+        disp('No axis specified.')
       end
       
       type = lower(type);
@@ -342,7 +344,12 @@ classdef EyeSphere < handle
         obj.fig = gcf;
         obj.ax = gca;
       else
-        set(obj.fig,'currentaxes',obj.parent.handleAxis);
+        try
+          set(obj.fig,'currentaxes',obj.ax);
+        catch e
+          getReport(e)
+          keyboard
+        end
       end
       
       obj.deleteHandles();
@@ -442,9 +449,11 @@ classdef EyeSphere < handle
           else
             % Do nothing
           end
-          
-          obj.parent.plotFlatRepresentation([]);
 
+          if(~isempty(obj.parent))
+            obj.parent.plotFlatRepresentation([]);
+          end
+        
         catch e
           getReport(e)
           keyboard
@@ -965,9 +974,20 @@ classdef EyeSphere < handle
       % Project the cursor along the axis, to find out how we
       % should rescale.
       vNew = [x;y;0];
-      reScale = abs(sum((vNew - obj.centre).*(vOld - obj.centre)) ...
-                    ./ sum((vOld-obj.centre).*(vOld-obj.centre)));
+      
+      %reScale = abs(sum((vNew - obj.centre).*(vOld - obj.centre)) ...
+      %              ./ sum((vOld-obj.centre).*(vOld-obj.centre)));
+      
+      % Only do projection in x-y plane
+      centre = obj.centre;
+      centre(3) = 0;
+      vOld(3) = 0;
+      
+      reScale = abs(sum((vNew - centre).*(vOld - centre)) ...
+                    ./ sum((vOld-centre).*(vOld-centre)));
 
+      % keyboard
+      
       if(isnan(reScale))
         disp('NAN!!')
         keyboard
@@ -1161,6 +1181,7 @@ classdef EyeSphere < handle
       end      
       
       obj.plotAllSpheres();
+      
       obj.parent.plotFlatRepresentation(obj.injection);
       
       % Set the treshold of the injection
@@ -1548,7 +1569,7 @@ classdef EyeSphere < handle
         
       % Check that f is within bounds, our new NT coordinate
       try
-        assert(all(0 <= f & f <= 1))
+        assert(all(0-1e-9 <= f & f <= 1+1e-9))
       catch e
         getReport(e)
         keyboard
