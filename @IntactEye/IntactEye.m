@@ -683,6 +683,22 @@ classdef IntactEye < handle
       
       close(plotFig)
       
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      
+      % We also want to plot the flat injection view
+      plotInjFig = figure('visible','off'); % Turn off when we know
+                                           % it works
+      
+      % -1 means we plot in the current figure
+      obj.plotFlatRepresentation(obj.topView.injection, -1);
+      
+      
+      fName = sprintf('FIGS/%s-FLAT-3D-coord-%.2f-NT-%.2f-DV.pdf', ...
+                      obj.getExpName, obj.topView.injNT, obj.topView.injDV);
+      fprintf('Saving figure to: %s\n', fName)
+      saveas(plotInjFig,fName,'pdf')
+      
+      close(plotInjFig)
       
     end
     

@@ -440,7 +440,7 @@ classdef EyeSphere < handle
                       fNT, fDV);
         set(obj.fig,'name',str)
 
-        obj.parent.plotFlatRepresentation();
+        obj.parent.plotFlatRepresentation(obj.injection);
        
       else
         try

@@ -1,13 +1,22 @@
-function plotFlatRepresentation(obj,injection)
+function plotFlatRepresentation(obj,injection,fig)
  
   disp('plotFlatRepresentation called')
   
-  set(obj.fig,'currentaxes',obj.handlePolarAxis);
-  cla
-
   if(~exist('injection') | isempty(injection) | numel(injection) ~= 3)
     return
   end
+  
+  if(exist('fig'))
+    if(fig == -1)
+      % Use the current figure
+    elseif(~isempty(fig))
+      figure(fig)
+    end
+  else
+    set(obj.fig,'currentaxes',obj.handlePolarAxis);
+    cla
+  end
+  
   
   sphere = obj.topView;
   
