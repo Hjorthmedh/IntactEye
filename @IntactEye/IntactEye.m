@@ -423,7 +423,7 @@ classdef IntactEye < handle
         obj.sideView.plotSphere();
         obj.topView.captureActionListener();
         obj.sideView.captureActionListener();
-        obj.plotFlatRepresentation(obj.topView.injection);
+        obj.plotFlatRepresentation(obj.topView.injection,obj.topView.injectionRegion);
       catch e
         getReport(e)
         keyboard
@@ -690,7 +690,7 @@ classdef IntactEye < handle
                                            % it works
       
       % -1 means we plot in the current figure
-      obj.plotFlatRepresentation(obj.topView.injection, -1);
+      obj.plotFlatRepresentation(obj.topView.injection, obj.topView.injectionRegion,-1);
       
       
       fName = sprintf('FIGS/%s-FLAT-3D-coord-%.2f-NT-%.2f-DV.pdf', ...
@@ -880,6 +880,8 @@ classdef IntactEye < handle
       if(~isempty(obj.imageExtract.lastSphere))
         obj.imageExtract.markInjection(obj.imageExtract.lastSphere);
       end
+      
+      obj.showSpheres();
     end
     
     

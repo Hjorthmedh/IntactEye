@@ -1,4 +1,4 @@
-function plotFlatRepresentation(obj,injection,fig)
+function plotFlatRepresentation(obj,injection,injectionArea,fig)
  
   disp('plotFlatRepresentation called')
   
@@ -29,6 +29,26 @@ function plotFlatRepresentation(obj,injection,fig)
   hold on
   polar(v,toRadius(rimAngle*ones(1,nPoints)),'b-');
   
+  injPlotted = false;
+  
+  % Draw injection area if we have it
+  
+  if(exist('injectionArea') & ~isempty(injectionArea))
+    xA = injectionArea(:,1);
+    yA = injectionArea(:,2);
+    zA = injectionArea(:,3);    
+    
+    rA = sqrt(sum(injectionArea.^2,2));
+    thetaA = acos(zA./rA);
+    phiA = atan2(yA,xA);
+  
+    p = polar(phiA,toRadius(thetaA),'r.');
+    injPlotted = true;
+  end
+  
+  
+  % Now draw the injection centre
+  
   x = [];
   y = [];
   z = [];
@@ -52,7 +72,9 @@ function plotFlatRepresentation(obj,injection,fig)
   theta = acos(z./r);
   phi = atan2(y,x);
   
-  polar(phi,toRadius(theta),'r*')
+  if(~injPlotted)
+    polar(phi,toRadius(theta),'r*')
+  end
   
   function vR = toRadius(v)
    vR = v./pi;
