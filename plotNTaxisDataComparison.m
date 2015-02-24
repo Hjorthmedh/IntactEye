@@ -284,6 +284,8 @@ set(gca,'fontsize',20)
 box off
 axis equal  
 axis([0 100 0 100])
+set(gca,'xtick',0:20:100)
+set(gca,'ytick',0:20:100)
 
 saveas(gcf,'FIGS/Reber-compare-methods-NT-axis-alt.pdf','pdf')
 
@@ -331,7 +333,8 @@ set(gca,'fontsize',20)
 box off
 axis equal  
 axis([0 100 0 100])
-
+set(gca,'xtick',0:20:100)
+set(gca,'ytick',0:20:100)
 
 saveas(gcf,'FIGS/Reber-compare-methods-DV-axis-alt.pdf','pdf')
 
