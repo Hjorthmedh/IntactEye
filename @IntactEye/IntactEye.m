@@ -717,6 +717,12 @@ classdef IntactEye < handle
     
     function updateInjectionThreshold(obj)
       
+      if(isempty(obj.image))
+        % No image loaded, we are dealing with synthetic data, dont
+        % do anything
+        return
+      end
+      
       % Injection locations for top and side sphere
       if(numel(obj.topView.injection) == 3)
         try
