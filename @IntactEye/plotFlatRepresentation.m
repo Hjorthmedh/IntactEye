@@ -77,7 +77,7 @@ function plotFlatRepresentation(obj,injection,injectionArea,fig)
   end
   
   function vR = toRadius(v)
-   vR = v./pi;
+   vR = (pi - v)./pi;
   end
   
   

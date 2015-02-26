@@ -118,7 +118,7 @@ classdef IntactEye < handle
       
       obj.handleAxis = axes('position', [0 0 0.72 1]);
       hold on
-      obj.handleAxis.Clipping = 'off'
+      % obj.handleAxis.Clipping = 'off'
 
       obj.handlePolarAxis = axes('position', [0.75 0.1 0.20 0.25]);
       axis equal
@@ -389,8 +389,13 @@ classdef IntactEye < handle
     function showImage(obj)
       
       if(~isempty(obj.image))
-        set(obj.fig,'currentaxes',obj.handleAxis);
-        
+        try
+          set(obj.fig,'currentaxes',obj.handleAxis);
+        catch e 
+          getReport(e)
+          keyboard
+        end
+          
         if(~isempty(obj.topView))
           obj.topView.deleteHandles();
         end
@@ -891,8 +896,21 @@ classdef IntactEye < handle
       
       imLoad = ImageLoader();
       
-      obj.fileName = {imLoad.imageA.filename, imLoad.imageB.filename};
-      obj.filePath = {imLoad.imageA.filepath, imLoad.imageB.filepath};
+      if(isempty(imLoad.imageA))
+        % Nothing loaded, do nothing
+        return
+      end
+      
+      if(isempty(imLoad.imageB))
+        % ImgA exists but not B
+        obj.fileName = imLoad.imageA.filename;
+        obj.filePath = imLoad.imageA.filepath;
+      else
+        % Both exist, do default action
+        obj.fileName = {imLoad.imageA.filename, imLoad.imageB.filename};
+        obj.filePath = {imLoad.imageA.filepath, imLoad.imageB.filepath};
+      end
+      
       obj.image = imLoad.combinedImage;
       
       % Show the user the new data

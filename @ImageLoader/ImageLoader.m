@@ -26,6 +26,16 @@ classdef ImageLoader < handle
       obj.imageA = obj.loadImage();
       obj.imageB = obj.loadImage(obj.imageA.filepath);
 
+      if(isempty(obj.imageB))
+        if(~isempty(obj.imageA))
+          disp('Only one image loaded, nothing to combine')
+          obj.combinedImage = obj.imageA.img;
+        end
+        
+        return
+      end
+
+      
       obj.combinedImage = obj.combineImages(obj.imageA.img,obj.imageB.img);
       
     end
@@ -48,14 +58,13 @@ classdef ImageLoader < handle
         [fileName,filePath] = uigetfile(sprintf('%s/*.tif*', filePath));
       end
       
-      if(isempty(fileName))
-        img = [];
+      if(isempty(fileName) | fileName == 0)
+        imageStruct = [];
         return
       end
       
       fName = sprintf('%s/%s', filePath, fileName);
       img = imread(fName);
-      
       img = img(end:-1:1,:,:);
       
       imageStruct.filename = fileName;

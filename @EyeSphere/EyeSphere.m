@@ -502,21 +502,21 @@ classdef EyeSphere < handle
         case 1
           % Plot point
           v = obj.trans(injection) + obj.centre;
-          h(1) = plot3(v(1),v(2),v(3),'.','color',[1 1 1]*0.99,'markersize',20);
+          h(1) = plot3(v(1),v(2),v(3)+obj.zShift,'.','color',[1 1 1]*0.99,'markersize',20);
                     
         otherwise
           % Plot line
           v = obj.trans(injection) + repmat(obj.centre,1,size(injection,2));
 
           if(mean(v(3,:)) > 0)
-            h(1) = plot3(v(1,:),v(2,:),v(3,:),'w-','linewidth',3);
+            h(1) = plot3(v(1,:),v(2,:),v(3,:)+obj.zShift,'w-','linewidth',3);
           else
             % This indicates that the line is on the backside of
             % the retina
-            h(1) = plot3(v(1,:),v(2,:),v(3,:),'w--','linewidth',3);
+            h(1) = plot3(v(1,:),v(2,:),v(3,:)+obj.zShift,'w--','linewidth',3);
           end
           
-          h(2) = plot3(v(1,:),v(2,:),v(3,:),'w.','markersize',20);
+          h(2) = plot3(v(1,:),v(2,:),v(3,:)+obj.zShift,'w.','markersize',20);
                  
       end
       
@@ -1267,7 +1267,7 @@ classdef EyeSphere < handle
       
       assert(strcmpi(obj.viewType,'side'))
       
-      nPoints = 500;
+      nPoints = 2000;
       
       % All possible points on line of first injection
       injLine = [linspace(obj.injection(1,1),obj.injection(1,2),nPoints); ...
@@ -1671,6 +1671,19 @@ classdef EyeSphere < handle
                         * obj.rotZ(angle3(3));
       
     end
+
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    function [r,theta,phi] = getPolarCoordinates(obj,x,y,z)
+    
+      r = sqrt(x.^2 + y.^2 + z.^2);
+      theta = acos(z/r);
+      phi = atan2(y,x);
+      
+    end
+      
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
   end
   
