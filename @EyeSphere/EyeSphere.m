@@ -290,7 +290,7 @@ classdef EyeSphere < handle
       end
      
       if(~exist('maxDist') | isempty(maxDist))
-        maxDist = 50;
+        maxDist = [60 50 50 50];
       end
       
       handleType = {'centre','x','y','z'};
@@ -302,7 +302,7 @@ classdef EyeSphere < handle
           
           d = o.getDistance(handleType{j},xp,yp);
           
-          if(d < closestDist & d < maxDist)
+          if(d < closestDist & d < maxDist(j))
             % Ignore anything further away than maxDist
             closestObj = o;
             closestType = handleType{j};
