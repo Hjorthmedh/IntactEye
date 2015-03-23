@@ -692,10 +692,10 @@ classdef EyeSphere < handle
     
     function obj = setupMouseButtonListener(obj,source,event)
       
-      if(isempty('source'))
+      if(~exist('source') | isempty(source))
         return
       end
-      
+            
       % If the sphere is not displayed, then do not do this
       if(isempty(obj.handleX))
         return
@@ -714,11 +714,11 @@ classdef EyeSphere < handle
       disp('Okay lets parse the click')
       
       buttonType = get(gcbf,'selectionType');
-      buttonType
+      % buttonType
       
       switch(buttonType)
         case 'normal' 
-          disp('Left click')
+          fprintf('%s: Left click\n',datestr(now()))
           % Determine which point is closest
           [closestObj,closestType] = obj.getClosestSphere();
           % closestObj,closestType
@@ -740,7 +740,7 @@ classdef EyeSphere < handle
         case 'alt'
           % Right click
           
-          disp('Right click')
+          fprintf('%s: Right click\n',datestr(now()))
           
           
           closestObj = obj.withinSphere(cx,cy);
@@ -773,7 +773,8 @@ classdef EyeSphere < handle
                       'interruptible','off');       
           
         otherwise
-          fprintf('Unknown selectionType: %s - Doing nothing.\n', buttonType)
+          fprintf('%s: Unknown selectionType: %s - Doing nothing.\n', ...
+                  datestr(now()), buttonType)
       end
       
     end

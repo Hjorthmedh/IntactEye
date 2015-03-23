@@ -6,38 +6,44 @@ close all, clear all
 % d = load('SAVE/trainingScores.mat');
 dJH = load('SAVE/trainingScores-JH.mat'); % Backup 2014-09-22
 dEC = load('SAVE/trainingScores-EC.mat'); 
-dES = load('SAVE/trainingScores-ES.mat'); 
+% dES = load('SAVE/trainingScores-ES.mat'); 
 
 JH = dJH.oldScores;
 EC = dEC.oldScores;
-ES = dES.oldScores;
+% ES = dES.oldScores;
 
 % For some reason old(1) has an empty realDV value
 disp('Removing first oldScores entry, since realDV was empty there')
 JH = JH(2:end);
 
 % Ellese had missed to move the sphere to overlay the image, remove those
-r = cat(2,EC.guessedRadius);
-idx = find(r(3,:) ~= 100)
-EC = EC(idx);
+% r = cat(2,EC.guessedRadius);
+% idx = find(r(3,:) ~= 100)
+% EC = EC(idx);
+
+for i = numel(EC):-1:1
+  if(isempty(EC(i).guessedNT))
+    EC(i) = [];
+  end
+end
 
 % Same bug in Eliese's data
-ES = ES(2:end);
+% ES = ES(2:end);
 
 realNT{1} = cat(1,JH.realNT);
 guessedNT{1} = cat(1,JH.guessedNT);
 realNT{2} = cat(1,EC.realNT);
 guessedNT{2} = cat(1,EC.guessedNT);
-realNT{3} = cat(1,ES.realNT);
-guessedNT{3} = cat(1,ES.guessedNT);
+% realNT{3} = cat(1,ES.realNT);
+% guessedNT{3} = cat(1,ES.guessedNT);
 
 
 realDV{1} = cat(1,JH.realDV);
 guessedDV{1} = cat(1,JH.guessedDV);
 realDV{2} = cat(1,EC.realDV);
 guessedDV{2} = cat(1,EC.guessedDV);
-realDV{3} = cat(1,ES.realDV);
-guessedDV{3} = cat(1,ES.guessedDV);
+% realDV{3} = cat(1,ES.realDV);
+% guessedDV{3} = cat(1,ES.guessedDV);
 
 colours = [27,158,119;
            217,95,2;
@@ -60,7 +66,8 @@ set(gca,'xtick',0:0.2:1)
 set(gca,'ytick',0:0.2:1)
 
 box off
-legend(pNT,'JH','EC','ES','location','southeast')
+% legend(pNT,'JH','EC','ES','location','southeast')
+legend(pNT,'JH','EC','location','southeast')
 
 saveas(gcf,'FIGS/Synthetic-data-NT.pdf','pdf')
 

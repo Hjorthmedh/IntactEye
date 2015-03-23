@@ -465,7 +465,7 @@ classdef IntactEye < handle
       end
       
       fprintf('Saving state to %s\n', fName)
-      save(fName,'data','-v7.3');
+      save(fName,'data','-v7.3'); % HDF5
       
     end
     

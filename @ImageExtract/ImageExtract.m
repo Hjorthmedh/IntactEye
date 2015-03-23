@@ -58,8 +58,14 @@ classdef ImageExtract < handle
     function markInjection(obj,sphere)
             
       % Use injection point already marked in sphere
-      v = sphere.trans(sphere.injection) + sphere.centre;
-      
+      try
+        v = sphere.trans(sphere.injection) + sphere.centre;
+      catch e
+        beep
+        getReport(e)
+        keyboard
+      end
+        
       obj.findInjectionExtent(round(v(1)),round(v(2)),obj.threshold);
       obj.getInjectionOnSphere();
       % obj.plotInjection3D(sphere);
