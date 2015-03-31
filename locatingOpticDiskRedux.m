@@ -14,12 +14,26 @@ expColour = [166,206,227
 
 
 ES = EyeSphere([],[],[]);
+ES2 = EyeSphere([],[],[]);
+
+RScartesian = [];
 
 for i = 1:numel(expList)
   
   fNameRS = sprintf('%s/%s/r.mat', expPath, expList{i});
   dRS = load(fNameRS);
   ODcentreRS(i,:) = mean(dRS.Sss.OD,1);
+  
+  ES2.radius = [1; 1; 1];
+  vLat = pi/2 - ODcentreRS(i,1);
+  ES2.injection = [sin(vLat)*cos(ODcentreRS(i,2));
+                   sin(vLat)*sin(ODcentreRS(i,2));
+                   cos(vLat)];
+  
+  RScartesian(i,:) = ES2.injection;
+  
+  [RSnt,RSdv] = ES2.dualWedgeCoordinates(ES2.injection);
+  ODcentreRSNTDV(i,:) = [RSnt,RSdv];
   
   fNameIEmask = sprintf('SAVE/OD/*%s*-save.mat', expList{i}(2:end));
   dName = dir(fNameIEmask);
@@ -43,6 +57,8 @@ for i = 1:numel(expList)
   [rSphere,theta,phi] = ES.getPolarCoordinates(inj(1)/r(1),inj(2)/r(2),inj(3)/r(3));
   
   ODcentreIE(i,:) = [theta,phi];
+  
+  ODcentreIENTDV(i,:) = [dIE.data.topView_injNT,dIE.data.topView_injDV];
   
 end
 
@@ -92,4 +108,19 @@ for i = 1:length(th),
       set(th(i),'FontSize',18)
 end
 
-saveas(gcf,'FIGS/optic-disk-comparison-RS-IE.pdf','pdf')
+% saveas(gcf,'FIGS/optic-disk-comparison-RS-IE.pdf','pdf')
+
+printA4('FIGS/optic-disk-comparison-RS-IE.eps')
+
+
+% We also need to convert DS polar coordinates into wedge
+% coordinates
+
+ODcentreRSNTDV % Double check these
+ODcentreIENTDV
+
+meanRSNTDV = mean(ODcentreRSNTDV,1)
+stdRSNTDV = std(ODcentreRSNTDV,1)
+
+meanIENTDV = mean(ODcentreIENTDV,1)
+stdIENTDV = std(ODcentreIENTDV,1)

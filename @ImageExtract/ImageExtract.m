@@ -210,7 +210,7 @@ classdef ImageExtract < handle
 
       
       % Find which sphere the points belong to
-      sphere = obj.retinalSphere.topView.getClosestSphere(xc,yc,inf);
+      sphere = obj.retinalSphere.topView.getClosestSphere(xc,yc,inf*[1 1 1 1]);
 
       % Transform the coordinates into the spheres coordinates
       

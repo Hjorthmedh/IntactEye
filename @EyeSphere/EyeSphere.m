@@ -302,11 +302,16 @@ classdef EyeSphere < handle
           
           d = o.getDistance(handleType{j},xp,yp);
           
-          if(d < closestDist & d < maxDist(j))
-            % Ignore anything further away than maxDist
-            closestObj = o;
-            closestType = handleType{j};
-            closestDist = d;
+          try
+            if(d < closestDist & d < maxDist(j))
+              % Ignore anything further away than maxDist
+              closestObj = o;
+              closestType = handleType{j};
+              closestDist = d;
+            end
+          catch e
+            getReport(e)
+            keyboard
           end
         end       
       end
@@ -1260,6 +1265,8 @@ classdef EyeSphere < handle
       
     end
     
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     % This function transforms x,y coordinates to the side injection
     % in the native cartesian coordinates for the sphere - this
     % function gives a point!
@@ -1310,6 +1317,76 @@ classdef EyeSphere < handle
 
       
       inj = [xs;ys;zs];
+      
+      % injAnalytical = obj.getSideInjectionLocationAnalytical(x,y);
+      % 
+      % keyboard
+      
+    end
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    % Working on an analytical solution... Needs to be fixed
+    
+    function inj = getSideInjectionLocationAnalytical(obj,x,y)
+      
+      disp('This is not yet correct!')
+      assert(false)
+      
+      assert(strcmpi(obj.viewType,'side'))
+ 
+      % Two points on the linke
+      p = obj.injection(:,1);
+      q = obj.injection(:,2);
+      
+      % Radius of ellipsoid
+      r = obj.radius;
+      
+      % x^2/rx^2 + y^2/ry^2 + z^2/rz^2 = 1
+      % x = k *(px-qx) + qx
+      % y = k *(py-qy) + qy
+      % z = k *(pz-qz) + qz
+      
+      % ---> a * k^2 + b*k + c = 0
+      
+      a =   (p(1)-q(1))^2 * r(2)^2 * r(3)^2 ...
+          + (p(2)-q(2))^2 * r(1)^2 * r(3)^2 ...
+          + (p(3)-q(3))^2 * r(1)^2 * r(2)^2;
+      
+      b = 2*(  (p(1)-q(1)) * r(2)^2*r(3)^2 ...
+             + (p(2)-q(2)) * r(1)^2*r(3)^2 ...
+             + (p(3)-q(3)) * r(1)^2*r(2)^2);
+      
+      c =   q(1)^2 * r(2)^2 * r(3)^2 ...
+          + q(2)^2 * r(1)^2 * r(3)^2 ...
+          + q(3)^2 * r(1)^2 * r(2)^2 ...
+          - r(1)^2 * r(2)^2 * r(3)^2;
+               
+      k1 = (-b + sqrt(b^2 + 4*a*c)) / (2*a); 
+      k2 = (-b - sqrt(b^2 - 4*a*c)) / (2*a);
+      
+      inj1 = k1 *[p(1)-q(1);p(2)-q(2);p(3)-q(3)] + q;
+      inj2 = k2 *[p(1)-q(1);p(2)-q(2);p(3)-q(3)] + q;      
+      
+      inj1T = obj.trans(inj1);
+      inj2T = obj.trans(inj2);
+      
+      try
+        assert((inj1T(3) > 0 | inj2T(3) > 0))      
+      catch e
+        inj1T
+        inj2T
+        getReport(e)
+        keyboard
+      end
+        
+      if(inj1T(3) > 0)
+        inj = inj1;
+      else
+        inj = inj2;
+      end
+      
+      keyboard
       
     end
     

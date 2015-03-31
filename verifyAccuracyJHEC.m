@@ -55,7 +55,7 @@ for i = 1:numel(realNT)
        'linewidth', 2);
   pNT(i) = plot(realNT{i},guessedNT{i},'.', ...
                 'color', colours(i,:), ...
-                'markersize',30,'linewidth',2)
+                'markersize',30,'linewidth',2);
 end
 xlabel('Synthetic NT','fontsize',24)
 ylabel('Estimated NT','fontsize',24)
@@ -77,7 +77,7 @@ for i = 1:numel(realDV)
        'linewidth', 2);
   pDV(i) = plot(realDV{i},guessedDV{i},'.', ...
                 'color',colours(i,:), ...
-                'markersize',30,'linewidth',2)
+                'markersize',30,'linewidth',2);
 end
 xlabel('Synthetic DV','fontsize',24)
 ylabel('Estimated DV','fontsize',24)
@@ -92,4 +92,6 @@ box off
 
 saveas(gcf,'FIGS/Synthetic-data-DV.pdf','pdf')
 
+NTpearson = corr([realNT{1};realNT{2}],[guessedNT{1};guessedNT{2}])
+DVpearson = corr([realDV{1};realDV{2}],[guessedDV{1};guessedDV{2}])
 
